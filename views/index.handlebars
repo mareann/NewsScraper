@@ -1,0 +1,128 @@
+
+<div id="articles">
+<ul>
+  {{#each scrapedData}}
+      <li id="unclaimed">
+        <p>
+        Donation Number: {{this.id}} <span> id: </span> {{this.title}} </p> 
+        <p> Donor Location: {{this.link}} </p> <span> Donor Comments: {{this.note}} </span>
+        </p>
+      </li>
+  
+  {{/each}}
+</ul>
+</div>
+      <!-- FOOTER -->
+
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; Created by: Maryann Jordan, &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+
+<script>
+
+$(function() {
+  $("#donorSubmit").on("click", function(event) { //was async
+    event.preventDefault();
+    var YardsInMile = 1760;
+    var first_name = $("#firstName").val().trim();
+    var last_name = $("#lastName").val().trim();
+    var food_type = $("#foodType").val().trim();
+    var donor_id = $("#donorId").val().trim();
+    var location_id = $("#locationId").val().trim();
+    var donorComments = $("#donorComments").val().trim();
+    var availableBegTime = $("#availableBegTime").val().trim();
+    var availableEndTime = $("#availableEndTime").val().trim();
+    var charity_id = 5;
+    var charityPickedUpFlag= 0;
+
+//origin 1, Chicago Community Ministry, 6525 N Clark St., Chicago, IL, 60626, Mr. Smith, C123, 1, , (773)761-6688, , , 1, 1, 0, 0, u, p
+//destination 2, Food4Less Washington Square, 4821 W North Ave, Chicago, IL, 60639, Ms McDougal, 2, 1, p@food.com, (773)235-1783, @Wash, , 1, 1, 0, 0, m, p
+      var origin = "6525 N Clark St., Chicago, IL, 60626";
+      var destination = "4821 W North Ave, Chicago, IL, 60639";
+      var service = new google.maps.DistanceMatrixService;
+        service.getDistanceMatrix({
+          origins: [origin],
+          destinations: [destination],
+          travelMode: 'DRIVING',
+          unitSystem: google.maps.UnitSystem.IMPERIAL,
+          avoidHighways: false,
+          avoidTolls: false
+        }, function(response, status) {
+          if (status !== 'OK') {
+            alert('Error was: ' + status);
+          } else {
+            var originList = response.originAddresses;
+            var destinationList = response.destinationAddresses;
+            //var outputDiv = document.getElementById('output');
+            //outputDiv.innerHTML = '';
+            };
+            for (var i = 0; i < originList.length; i++) {
+              var results = response.rows[i].elements;
+              for (var j = 0; j < results.length; j++) {
+                //outputDiv.innerHTML 
+               // var output += originList[i] + ' to ' + destinationList[j] +
+                //    ': ' + results[j].distance.text + ' in ' +
+                //    results[j].duration.text + '<br>';
+              }
+            }
+            console.log("distance results "+JSON.stringify(results));
+            var distance = (results[0].distance.value/YardsInMile).toFixed(2);
+            console.log("distance is "+distance)
+      var newFoodDonation = {
+      foodTypeId:       food_type,
+      foodImageUrl:     "",
+      donorId:          donor_id,
+      donorLocation:    location_id,
+      donorComments:    donorComments,
+      availableBegTime: availableBegTime,
+      availableEndTime: availableEndTime,
+      charityId:        charity_id,
+      charityPickedUpFlag: 0,
+      distanceToCharity: 0
+    };
+    $.ajax("/distancecalc", {
+      type: "GET",
+      data: {location: location_id}
+    }).then(
+      function() {
+        console.log("sent /distancecalc", location_id);
+        //back here, we have the json object from the backend for the nearest charity
+        //do something with that, idk, whatever
+      }
+    );
+    console.log("newFoodDonation "+JSON.stringify(newFoodDonation));
+  // Send the PUT request.
+    $.ajax("/api/donations", {
+      type: "POST",
+      data: newFoodDonation
+    }).then(
+      function() {
+        console.log("sent /api/donations", newFoodDonation);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    ); // end .then
+    
+           // console.log("distance output "+results);
+  }); // end service.getDistanceMatrix function
+  }); //donor submit function end
+  $(".food").on("click", function(event) {
+    var id = $(this).data("foodid");
+    var charityPickedUp = {
+      charityPickedUpFlag: 1
+    };
+    
+    $.ajax("/api/donations/" + id, {
+      type: "PUT",
+      data: charityPickedUp
+    }).then(
+      function() {
+        console.log("You claimed the donation");
+        location.reload();
+      }
+    )
+   })
+  });
+</script>
