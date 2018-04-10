@@ -29,7 +29,7 @@ var db = require("./models");
 
 // Sets up the Express app to handle data parsing
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
@@ -40,7 +40,10 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
-require("./controllers/fetch.js")(app);
+//require("./controllers/fetch.js")(app);
+// Import routes and give the server access to them.
+var routes = require("./controllers/news.js");
+app.use(routes);
 
 // Database configuration
 var databaseUrl = "scraper3";
@@ -159,7 +162,8 @@ app.get("/articles", function(req, res) {
     // Specify that we want to populate the retrieved libraries with any associated books
     .populate("note")
     .then(function(dbArticle) {
-      console.log("app.get /articles "+dbArticle)
+      console.log("app.get /articles")
+//console.log("app.get /articles "+dbArticle)
       // If any found, send them to the client with any associated Books
       res.json(dbArticle);
     })

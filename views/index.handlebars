@@ -1,11 +1,11 @@
 
-<div id="articles">
+<div id="newsArticles">
 <ul>
-  {{#each scrapedData}}
+  {{#each article}}
       <li id="unclaimed">
         <p>
-        Donation Number: {{this.id}} <span> id: </span> {{this.title}} </p> 
-        <p> Donor Location: {{this.link}} </p> <span> Donor Comments: {{this.note}} </span>
+        Number: {{this.id}} <span> id: </span> {{this.title}} </p> 
+        <p> Link: {{this.link}} </p> <span> Comments: {{this.note}} </span>
         </p>
       </li>
   
