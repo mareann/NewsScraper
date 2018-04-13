@@ -1,9 +1,9 @@
-// Require mongoose
+
 var mongoose = require("mongoose");
 var uniqueValidator = require('mongoose-unique-validator');
 // Create Schema class
 var Schema = mongoose.Schema;
-
+//not work Schema.plugin(uniqueValidator);
 // Create article schema
 var ArticleSchema = new Schema({
   // title is a required string
