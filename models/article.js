@@ -1,3 +1,6 @@
+/////////////////////////////////////////////////////////
+// models/article.js                Maryann Jordan
+/////////////////////////////////////////////////////////
 
 var mongoose = require("mongoose");
 var uniqueValidator = require('mongoose-unique-validator');

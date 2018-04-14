@@ -5,29 +5,17 @@
         margin-left: auto;
         margin-right: auto;
         padding-top: 2%;
-      }
-      #wrapperold {
-        width: 960px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 5%;
+        align-contents: center;
       }
       #articles {
         display: inline-block;
         overflow: auto;
-        width: 60%;
+        width: 80%;
         height: 80%;
       }
-      #articlesold {
-        display: inline-block;
-        overflow: auto;
-        width: 60%;
-        height: 700px;
-      }
       #notes {
-        float: right;
         margin-left:2em;
-        width: 30%;
+        padding: 2em;
       }
       textarea, input {
         display: block;
@@ -67,19 +55,34 @@
   img {
     align-contents: center;
   }
+  ul {
+   text-decoration: none;
+  }
+  #scrapeButton {
+    font-height: 4em;
+    padding: 0.5em;
+    margin: 0.5em;
+    font-weight: bold;
+  }
+  button:hover {
+    background-color: yellow;
+  }
+  button {
+    background: lightblue;
+  }
 </style>
 <img src="assets/images/huffpost.jpg" width=100% height=20%>
 <div id="wrapper">
 <h1>Headline News</h1>
 <h3>Join the discusson of current news. Leave your comment!</h3>
-  <button id="scrapeButton" type="submit" class="submit">SCRAPE</button>
-
 <div id="articles">
+  <button id="scrapeButton" type="submit" class="submit">GET NEW ARTICLES</button>
 <ul>
   {{#each article}}
       <li id="articleDetails">
         <p>
-        Number: {{this.id}}</p>        
+        {{this.id}}
+        </p>        
         <p>READ <a href="{{this.link}}">{{this.title}}</a></p>
          <h2>{{this.title}}</h2> 
         <button id="{{this.id}}" class="commentButton" type="submit" class="submit">Comment</button> 
@@ -96,31 +99,7 @@
       <!-- FOOTER -->
 
       <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p class="pull-right"></p>
         <p>&copy; Created by: Maryann Jordan, &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
       </footer>
 
-
-<script>
-
-$(function() {
-
-
-  $(".food").on("click", function(event) {
-    var id = $(this).data("foodid");
-    var charityPickedUp = {
-      charityPickedUpFlag: 1
-    };
-    
-    $.ajax("/api/donations/" + id, {
-      type: "PUT",
-      data: charityPickedUp
-    }).then(
-      function() {
-        console.log("You claimed the donation");
-        location.reload();
-      }
-    )
-   })
-  });
-</script>
