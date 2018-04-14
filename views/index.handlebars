@@ -1,20 +1,97 @@
-
-<button id="scrapeButton" type="submit" class="submit">SCRAPE</button>
+    <style>
+      body { background-color: #F2F6D0 }
+      #wrapper {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 2%;
+      }
+      #wrapperold {
+        width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 5%;
+      }
+      #articles {
+        display: inline-block;
+        overflow: auto;
+        width: 60%;
+        height: 80%;
+      }
+      #articlesold {
+        display: inline-block;
+        overflow: auto;
+        width: 60%;
+        height: 700px;
+      }
+      #notes {
+        float: right;
+        margin-left:2em;
+        width: 30%;
+      }
+      textarea, input {
+        display: block;
+        width: 100%;
+        background-color: #FCF5C7;
+      }
+      input {
+        height: 36px;
+        font-size: 24px;
+      }
+      textarea {
+        height: 200px;
+        font-size: 18px;
+      }
+  a {
+    font-size:2em;
+  }
+  h1 {
+    margin-top: 0;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    background: black;
+    color: white;
+    text-align: center;
+    font-height: 3em;
+  }
+  #articleDetails {
+      padding: 1em;
+      background: lightgreen;
+      border: solid white
+  }
+  h3 {
+     padding: .3em;
+     margin-left: 1em;
+     font-weight: bold;
+  }
+  img {
+    align-contents: center;
+  }
+</style>
+<img src="assets/images/huffpost.jpg" width=100% height=20%>
+<div id="wrapper">
+<h1>Headline News</h1>
+<h3>Join the discusson of current news. Leave your comment!</h3>
+  <button id="scrapeButton" type="submit" class="submit">SCRAPE</button>
 
 <div id="articles">
-</div>
-<div id="newsArticles">
 <ul>
   {{#each article}}
-      <li id="unclaimed">
+      <li id="articleDetails">
         <p>
-        Number: {{this.id}} <span> id: </span> {{this.title}} </p> 
-        <p> Link: {{this.link}} </p> <span> Comments: {{this.note}} </span>
+        Number: {{this.id}}</p>        
+        <p>READ <a href="{{this.link}}">{{this.title}}</a></p>
+         <h2>{{this.title}}</h2> 
+        <button id="{{this.id}}" class="commentButton" type="submit" class="submit">Comment</button> 
+        <div id="notes">
+          <span> {{this.note}} </span>
+        </div>
         </p>
       </li>
-  
+ 
   {{/each}}
 </ul>
+</div>
 </div>
       <!-- FOOTER -->
 

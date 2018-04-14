@@ -82,45 +82,71 @@ app.get("/scrape", function(req, res) {
       .children("a").
       attr("href");
 
-      // console.log("app.get /scrape result "+result.title+" "+result.link)
-
+      console.log("*** server: app.get /scrape RESULT "+result.title+" "+result.link)
+      console.log("*** server push RESULT "+(result.title).trim())
+      articleArray.push({
+        result
+      });
       // Create a new Article using the `result` object built from scraping
-      db.Article.find({title:result.title},function(err,duplicate){
-        if (err) 
-          console.log(err)
-        if (duplicate.length)
-          console.log("duplicate "+duplicate)
-        else
+      db.Article.find(
         {
- 
-          db.Article.create(result)
+          title: result.title
+        },
+        function(err,duplicate){
+
+          if (duplicate.length)
+            console.log("*** scrape: DUPLICATE in db "+duplicate)
+          else
+          {
+            db.Article.create(result)
             .then(function(dbArticle) {
                  // View the added result in the console
-             console.log("*** scrape result "+result)
-             console.log("*** scrape: new dbArticle "+dbArticle);
-            articleArray.push({
-              result
-            });
-        })
+             //console.log("*** scrape result "+result)
+             console.log("*** scrape: new dbArticle INSERT db "+dbArticle);
+   //         articleArray.push({
+   //           result
+   //         });
+            })
+          }
+        if (err) 
+        {
+          console.log("*** scrape: error "+err)
+          //return handleError(err);
+        }
+      })
         .catch(function(err) {
           // If an error occurred, send it to the client
            console.log("*** server: app.get /scrape error "+err)
           return res.json(err);
         }); //end .catch
+    
            // Save these results in an object to
       // push into the results array we defined earlier
-  //moved up    articleArray.push({
-  //      result
-  //    });
+ /*     console.log("*** server push result "+result.title)
+      articleArray.push({
+        result
+      });
+*/
     //test no change  result.render(dbArticle)
-    } // end div card__headline
-}) // end db.find
+ 
+     // end db.find
 
      //console.log("*** server: app.get /scrape articleArray length "+articleArray.length)
       console.log("*** server: app.get /scrape res.json articleArray length "+articleArray.length)
       res.json(articleArray); //send to app.js
-   })  // end each
+      //res.render("index",articleArray);
+
+   
+    }) // end div card__headline
+
+        // })  // end each
  }) // end axios
+   /*     .catch(function(err) {
+          // If an error occurred, send it to the client
+           console.log("*** server: app.get /scrape error "+err)
+          return res.json(err);
+        }); //end .catch */
+
 //test no change res.render("index", res)
  // res.send("Scrape Complete!")
   console.log("finished scrape");
@@ -154,10 +180,46 @@ app.get("/", function(req, res) {
 console.log("server: ** app.get / res.render(index, dbArticle)");
       res.render("index", dbArticle);  //{ articles : Article }); 
       //res.json(dbArticle);
-
     })
     .catch(function(err) {
       // If an error occurs, send it back to the client
+      res.json(err);
+    });
+});
+
+// Route for grabbing a specific Headline by id, 
+// populate it with it's note
+//app.get("/headlines/:id", function(req, res) {
+
+app.get("/headlines/:id", function(req, res) {
+  console.log("headlines id "+req.params.id)
+  // find headline using the req.params.id,
+  // and run the populate method with "note",
+  // then responds with the headline with the note included
+  db.Article.findOne({_id: req.params.id})
+  .populate("note")
+  .then(function(dbHeadline) {
+    console.log("server headline "+dbHeadline)
+    res.json(dbHeadline);
+  })
+  .catch(function(err) {
+    res.json(err);
+  });
+});
+
+// Route for saving/updating an Headline's associated Note
+app.post("/headlines/:id", function(req, res) {
+  // save the new note that gets posted to the Notes collection
+  // then find an headline from the req.params.id
+  // and update it's "note" property with the _id of the new note
+  db.Note.create(req.body)
+    .then(function(dbNote) {
+      return db.Headline.findOneAndUpdate({_id: req.params.id}, {$set: {note: dbNote._id}});
+    })
+    .then(function(dbHeadline) {
+      res.json(dbHeadline);
+    })
+    .catch(function(err) {
       res.json(err);
     });
 });

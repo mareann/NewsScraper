@@ -20,7 +20,7 @@ module.exports = router;
 //  $("#scrapeButton").on("click", function(event) { 
 //    event.preventDefault();
 //router.get("/articles", function(req, res) {
-//test
+
 router.get("/", function(req, res) {
   console.log("--- controller: router.get / Article.find render index");
   db.Article.find({  }, function (err, data) {
@@ -32,14 +32,33 @@ router.get("/", function(req, res) {
     //prints all the data
 //console.log("** controller: router.get / Article "+newsObject.article.title) 
 console.log("--- controller: res.render(index, newsObject)")
+    //renders on / page
     res.render("index", newsObject);
     //res.render("index", data); // note does not render
 
   // });
 //})
-
   });
 })
+/*
+router.get("/"+:AID, function(req, res) {
+  console.log("--- controller: router.get / Article.find render index");
+  db.Article.find({ _id:AID  }, function (err, data) {
+    if (err) return handleError(err);
+         console.log("--- controller: router.get /"+AID+" data.length "+data.length)
+    var newsObject = {
+    article: data
+    }
+    //prints all the data
+//console.log("** controller: router.get / Article "+newsObject.article.title) 
+console.log("--- controller: res.render(index, newsObject)")
+   // res.render("index", newsObject);
+    //res.render("index", data); // note does not render
+
+  // });
+//})
+  });
+})*/
 /*
 //router.get("/articles", function(req, res) {
   console.log("--- controller: router.get / Article.find render index");
