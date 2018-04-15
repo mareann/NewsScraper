@@ -1,6 +1,6 @@
 # NewsScraper
 
-## Full Stack web app that lets users view and leave comments on the ## latest news using node, handlebars, express, Mongoose and Cheerios.
+## Full Stack web app that lets users view and leave comments on the  latest news using node, handlebars, express, Mongoose and Cheerios.
 
 ## Whenever a user selects the “GET NEW ARTICLES” button: 
 * NewsScraper retrieves stories from Huffington Post and displays the  title and link. 
