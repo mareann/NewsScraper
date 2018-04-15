@@ -82,11 +82,8 @@
   <button id="scrapeButton" type="submit" class="submit">GET NEW ARTICLES</button>
 <ul>
   {{#each article}}
-      <li id="articleDetails">
-        <p>
-        {{this.id}}
-        </p>        
-        <p>READ <a href="{{this.link}}">{{this.title}}</a></p>
+      <li id="articleDetails">       
+        <p><a href="{{this.link}}">{{this.title}}</a></p>
          <h2>{{this.title}}</h2> 
         <button id="{{this.id}}" class="commentButton" type="submit" class="submit">Comment</button> 
         <div id="notes">
